@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Chesapeake Bay Land Cover Discover</title>
+        <!-- CSS Imports -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" integrity="sha256-iYUgmrapfDGvBrePJPrMWQZDcObdAcStKBpjP3Az+3s=" crossorigin="anonymous" />
+        <!-- Place framework CSS code here. -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+              integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+              crossorigin=""/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    
+        <link rel="stylesheet" href="css/style.css" />
+        <!-- Favicon
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+         <link rel="icon" href="https://i.dlpng.com/static/png/6399834_preview.png">      
+    </head>
+
+    <body>
+        <!-- Sidebar -->
+        <div class = "sidebar">
+            <h2 class="title">Chesapeake Bay Land Cover Explorer</h2>
+
+            <h3 class="whattoshow">
+                Explore Features:
+            </h3>
+            
+            <div class="features">
+                <li class="list-group-item list-group-item-light">Environment</li>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="elevation" unchecked>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Elevation</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="soiltype" unchecked>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Slope</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="soiltype" unchecked>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Soil Type</label>
+                    </div>
+                
+                <li class="list-group-item list-group-item-light">Census</li>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="population" unchecked>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Population</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="pctwhite" unchecked>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Percent of White</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="income" unchecked>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Income</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="dsttoroad" unchecked>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Distance to Road</label>
+                    </div>
+            </div>
+
+            <h3 class="checklc">
+                Check the Land Cover:
+            </h3>
+            
+            <br>
+            <div class="lccheckbox">
+                <li class="list-group-item list-group-item-light">Isle of Wight</li>
+                    <div class="choices">
+
+                        <div class="form-check">
+                        <input type="checkbox" value="" id="isle_2014">
+                        <label class="year" for="isle_2014">2014 Land Cover</label>
+                        </div>
+        
+                        <div class="form-check">
+                        <input type="checkbox" value="" id="isle_2018">
+                        <label class="year" for="isle_2018">2018 Land Cover</label>
+                        </div>
+
+                        <div class="form-check">
+                        <input type="checkbox" value="" id="isle_pred">
+                        <label class="year" for="isle_pred">Predicted Land Cover Change</label>
+                        </div>
+        
+                    </div>
+                
+                <li class="list-group-item list-group-item-light">Portsmouth</li>
+                    <div class="choices">
+
+                        <div class="form-check">
+                        <input type="checkbox" value="" id="port_2014">
+                        <label class="year" for="port_2014">2014 Land Cover</label>
+                        </div>
+        
+                        <div class="form-check">
+                        <input type="checkbox" value="" id="port_2018">
+                        <label class="year" for="port_2018">2018 Land Cover</label>
+                        </div>
+
+                        <div class="form-check">
+                        <input type="checkbox" value="" id="port_pred">
+                        <label class="year" for="port_pred">Predicted Land Cover Change</label>
+                        </div>
+        
+                    </div>
+
+                <li class="list-group-item list-group-item-light">James City</li>
+                    <div class="choices">
+
+                        <div class="form-check">
+                        <input type="checkbox" value="" id="james_2014">
+                        <label class="year" for="james_2014">2014 Land Cover</label>
+                        </div>
+        
+                        <div class="form-check">
+                        <input type="checkbox" value="" id="james_2018">
+                        <label class="year" for="james_2018">2018 Land Cover</label>
+                        </div>
+
+                        <div class="form-check">
+                        <input type="checkbox" value="" id="james_pred">
+                        <label class="year" for="james_pred">Predicted Land Cover Change</label>
+                        </div>
+        
+                    </div>
+
+            </div>
+
+        </div>
+
+        <!-- Map -->
+        <div id="map" class="map"></div>
+        <!-- Javascript Imports -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+                integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+                crossorigin=""></script>
+
+        <!-- Place framework JS code here. -->
+        <script src="js/main.js"></script>
+    </body>
+</html>
