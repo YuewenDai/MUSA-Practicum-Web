@@ -1,147 +1,111 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Chesapeake Bay Land Cover Discover</title>
-        <!-- CSS Imports -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" integrity="sha256-iYUgmrapfDGvBrePJPrMWQZDcObdAcStKBpjP3Az+3s=" crossorigin="anonymous" />
-        <!-- Place framework CSS code here. -->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-              integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-              crossorigin=""/>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    
-        <link rel="stylesheet" href="css/style.css" />
-        <!-- Favicon
-      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-         <link rel="icon" href="https://i.dlpng.com/static/png/6399834_preview.png">      
-    </head>
-
-    <body>
-        <!-- Sidebar -->
-        <div class = "sidebar">
-            <h2 class="title">Chesapeake Bay Land Cover Explorer</h2>
-
-            <h3 class="whattoshow">
-                Explore Features:
-            </h3>
-            
-            <div class="features">
-                <li class="list-group-item list-group-item-light">Environment</li>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="elevation" unchecked>
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Elevation</label>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="soiltype" unchecked>
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Slope</label>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="soiltype" unchecked>
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Soil Type</label>
-                    </div>
-                
-                <li class="list-group-item list-group-item-light">Census</li>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="population" unchecked>
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Population</label>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="pctwhite" unchecked>
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Percent of White</label>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="income" unchecked>
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Income</label>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="dsttoroad" unchecked>
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Distance to Road</label>
-                    </div>
-            </div>
-
-            <h3 class="checklc">
-                Check the Land Cover:
-            </h3>
-            
-            <br>
-            <div class="lccheckbox">
-                <li class="list-group-item list-group-item-light">Isle of Wight</li>
-                    <div class="choices">
-
-                        <div class="form-check">
-                        <input type="checkbox" value="" id="isle_2014">
-                        <label class="year" for="isle_2014">2014 Land Cover</label>
-                        </div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS Imports -->
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+    <style>
+        body, html {
+          height: 100%;
+          font-family: "Inconsolata", sans-serif;
+          margin: auto;
+          overflow: scroll;
+          overflow-x: hidden;
+          
+        }
         
-                        <div class="form-check">
-                        <input type="checkbox" value="" id="isle_2018">
-                        <label class="year" for="isle_2018">2018 Land Cover</label>
-                        </div>
-
-                        <div class="form-check">
-                        <input type="checkbox" value="" id="isle_pred">
-                        <label class="year" for="isle_pred">Predicted Land Cover Change</label>
-                        </div>
+        .bgimg {
+          background-position: center;
+          background-size: cover;
+          background-image: url("/landcover4.png") ;
+          opacity:1;
+          min-height: 75%;
+        }
         
-                    </div>
-                
-                <li class="list-group-item list-group-item-light">Portsmouth</li>
-                    <div class="choices">
+        </style>
+</head>
 
-                        <div class="form-check">
-                        <input type="checkbox" value="" id="port_2014">
-                        <label class="year" for="port_2014">2014 Land Cover</label>
-                        </div>
-        
-                        <div class="form-check">
-                        <input type="checkbox" value="" id="port_2018">
-                        <label class="year" for="port_2018">2018 Land Cover</label>
-                        </div>
 
-                        <div class="form-check">
-                        <input type="checkbox" value="" id="port_pred">
-                        <label class="year" for="port_pred">Predicted Land Cover Change</label>
-                        </div>
-        
-                    </div>
+<body>
+<!-- Links (sit on top) -->
+<div class="w3-top">
+    <div class="w3-row w3-padding w3-teal">
+      <div class="w3-col s3">
+        <a href="#home" class="w3-button w3-block w3-teal">HOME</a>
+      </div>
+      <div class="w3-col s3">
+        <a href="#about" class="w3-button w3-block w3-teal">ABOUT</a>
+      </div>
+      <div class="w3-col s3">
+        <a href="#introduction" class="w3-button w3-block w3-teal">INTRODUCTION</a>
+      </div>
+      <div class="w3-col s3">
+        <a href="#contact" class="w3-button w3-block w3-teal">CONTACT</a>
+      </div>
+    </div>
+  </div>
 
-                <li class="list-group-item list-group-item-light">James City</li>
-                    <div class="choices">
-
-                        <div class="form-check">
-                        <input type="checkbox" value="" id="james_2014">
-                        <label class="year" for="james_2014">2014 Land Cover</label>
-                        </div>
-        
-                        <div class="form-check">
-                        <input type="checkbox" value="" id="james_2018">
-                        <label class="year" for="james_2018">2018 Land Cover</label>
-                        </div>
-
-                        <div class="form-check">
-                        <input type="checkbox" value="" id="james_pred">
-                        <label class="year" for="james_pred">Predicted Land Cover Change</label>
-                        </div>
-        
-                    </div>
-
-            </div>
-
+    <!-- Header with image -->
+    <header class="bgimg w3-display-container w3-grayscale-min" id="home">
+        <div class="w3-display-bottomleft w3-center w3-padding-large w3-hide-small">
+        <span class="w3-text-white">Supported by HRPDC</span>
         </div>
+        <div class="w3-display-middle w3-center">
+        <span class="w3-text-white" style="font-size:90px;">Chesapeake Bay</span><br>
+        <span class="w3-text-white" style="font-size:75px;" >Land Cover Explorer</span>       
+        </div>
+        <div class = "w3-display-middle" style="padding-top: 30%;">
+            <div class = "dropdown">
+              <button class = "dropbtn" mos-panel-snap-next>Select a County</button>
+                <div class="dropdown-content">
+                  <a href="./county_page/port.html">Portsmouth, VA</a>
+                  <a href="./county_page/isle.html">Isle of Wight, VA</a>
+                  <a href="./county_page/james.html">James City, VA</a>
+                </div>
+          </div>
+        </div>
+        <div class="w3-display-bottomright w3-center w3-padding-large">
+        <span class="w3-text-white">A prediction tool</span>
+        </div>
+    </header>
 
-        <!-- Map -->
-        <div id="map" class="map"></div>
-        <!-- Javascript Imports -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-                integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-                crossorigin=""></script>
+    <!-- Add a background color and large text to the whole page -->
+    <div class="w3-sand w3-grayscale w3-large ">
 
-        <!-- Place framework JS code here. -->
-        <script src="js/main.js"></script>
-    </body>
+    <!-- About Project -->
+    <div class="w3-container" id="about">
+        <div class="w3-content" style="max-width:700px">
+        <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT OUR PROJECT</span></h5>
+        <p>This web tool is developed by Yuewen Dai supported by machine learning models built by Xinge Zhang, Shujing Yi, and Yuewen Dai altogether as part of the project for MUSA801 MUSA/Smart Cities Practicum Course taught by Michael Fichman and Matt Harris in the Master of Urban Spatial Analytics and Master of City Planning Programs at the University of Pennsylvania.</p>
+        <div class="w3-panel w3-leftbar w3-light-grey">
+            <p>check more info of this course's projects at <a href = "https://pennmusa.github.io/MUSA_801.io/" target = "_blank">MUSA 801 web page</a></p>
+            <p><i>Copyright © MUSA 801</i></p>
+        </div>
+        <img src="/musa_logo.png" style="width:100%;max-width:1000px" class="w3-margin-top">
+        </div>
+    </div>
+
+    <!-- Introduction -->
+    <div class="w3-container" id="introduction">
+        <div class="w3-content" style="max-width:700px">
+        <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">INTRO TO BACKGROUND</span></h5>
+        <p>Our project uses the 1-meter resolution land cover raster data, which is 900 times more detailed than the commonly used NLCD data for prediction. This unique dataset helps us create a more precise tool to help the local government visualize the potential of land cover change in a specific area more directly.  </p>
+        <p>The machine learning model is built based on the land cover data from three counties that have varied patterns of settlement and ecosystem, so it is generalizable to the county level. It can be used broadly, including land use planning, architecture construction, and landscape design.</p>
+        <p>By predicting area shift from pervious to impervious surface, our tool helps provide an opportunity to track how those areas might be influenced by climate risks, such as sea level rise and urban heat island effect. It helps the planning departments identify the areas where interventions(growing tree canopy, restoration of natural habitats, etc.) may be needed to mitigate the impacts of climate change.</p>
+        <img src="/land cover proj.png" style="width:100%;max-width:1000px" class="w3-margin-top">
+        <p><strong>From</strong> <a href = "https://www.chesapeakeconservancy.org/conservation-innovation-center/high-resolution-data/lulc-data-project-2022/" target = "_blank">Chesapeake Conservancy</a></p>
+        </div>
+    </div>
+
+    
+
+    
+</body>
 </html>
