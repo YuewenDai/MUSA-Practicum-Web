@@ -12,14 +12,7 @@ var Stamen_Terrain = L.tileLayer('http://{s}.basemaps.cartocdn.com/rastertiles/v
     ext: 'png'
   }).addTo(map);
 
-var port14_data = './county_page/data/port_14_10.tif';
-var altText = 'Portsmouth Landcover 2014.';
-var latLngBounds = L.latLngBounds([[36.848253, -76.364559], [36.87, -76.32]]);
 
-var imageOverlay = L.imageOverlay(port14_data, latLngBounds, {
-    opacity: 0.8,
-    alt: altText,
-    interactive: true
-}).addTo(map);
-L.rectangle(latLngBounds).addTo(map);
+var port14_data = L.leafletGeotiff('https://github.com/YuewenDai/MUSA-Practicum-Web/blob/main/county_page/data/port-test.tiff', renderer=displayMin).addTo(map);
+
 
