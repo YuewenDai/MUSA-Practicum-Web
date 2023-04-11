@@ -40,25 +40,35 @@
                 <h2 class="title" style="padding-left: 5%;padding-top: 3%;">Portsmouth County</h2>
                 
                 <div class = "sidebar-container-1">
-                    <h3 class="title-bar" style="padding-left: 5%;size: 25px;color: white;">
+                    <h3 class="title-bar" style="padding-left: 5%;padding-top: 1%;size: 25px;color: white;">
                         Explore Features:
                     </h3>
-                    <p id = "var_dropdown" style="padding-left: 5%;padding-top: 2%;color: white;">Select the feature you want to explore:</p>
-                    <select class = "selectVar" style="position: absolute;left: 5%;background-color: white;"  >
-                    <option value = "Elev">Elevation</option>
-                    <option value = "Slope">Slope</option>
-                    <option value = "Soil">Soil Type</option>
-                    <option value = "Pop">Population</option>
-                    <option value = "Pct_white">Percent of White</option>
-                    <option value = "Income">Median household income</option>
-                    <option value = "Dst_road">Distance to road</option>
+                    <p id = "var_dropdown" style="padding-left: 5%;padding-top: 2%;color: white;margin-bottom:1%">Select the Census feature:</p>
+                    <select id="property-select" class = "selectVar" style="position: absolute;left: 5%;background-color: white;"  >
+                    <option value = "Emptyselection">-- Select a feature --</option>
+                    <option value = "TotalPop">Population</option>
+                    <option value = "pctWhite">Percent of White</option>
+                    <option value = "MedHHInc">Median HH income</option>
+                    <option value = "TotalUnit">Total Unit</option>
                     </select>
+                    <br>
+                    <p id = "var_dropdown" style="padding-left: 5%;padding-top: 4%;color: white;margin-bottom:1%">Select the Geographic feature:</p>
+                    <select id="geo-select" class = "selectVar" style="position: absolute;left: 5%;background-color: white;"  >
+                    <option value = "Emptyselection">-- Select a feature --</option>
+                    <option value = "Elev">Elevation</option>
+                    <option value = "Soil">Soil Type</option>
+                    <option value = "Watershed">Watershed</option>
+                    <option value = "lc_2018">2018 Landcover </option>
+                    </select>
+                    <br>
+                    <p id = "var_dropdown" style="padding-left: 5%;padding-top: 4%;color: white;margin-bottom:1%">Change to impervious in 2022?</p>
+                    <button id="landcover-select" type="button" style="position: absolute;left: 5%;">Click me to check!</button>
                     <br>
                     <br>
                 </div>
 
                 <div class = "sidebar-container-2">
-                    <h3 class="title-bar" style="padding-left: 5%;padding-top:3%;size: 25px;color: white;">
+                    <h3 class="title-bar" style="padding-left: 5%;padding-top:2%;size: 25px;color: white;">
                         Info of County:
                     </h3>
                     
@@ -99,6 +109,7 @@
         <script src="https://unpkg.com/geotiff@0.4.1/dist/main.js"></script>
         <script src="https://unpkg.com/plotty@0.2.0/src/plotty.js"></script>
         <script src="leaflet-geotiff.js"></script>
+        <script src="https://unpkg.com/georaster-layer-for-leaflet/dist/georaster-layer-for-leaflet.min.js"></script>
         <!-- Load any renderer you need -->
         <script src="leaflet-geotiff-plotty.js"></script>
         <script src="leaflet-geotiff-vector.js"></script>
@@ -112,5 +123,6 @@
 
         <!-- Place framework JS code here. -->
         <script src="port.js"></script>
+        
     </body>
 </html>

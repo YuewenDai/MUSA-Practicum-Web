@@ -29,9 +29,9 @@ body {
     position: absolute;
     z-index: 9;
     left: 5%;
-    top: 5%;
-    width:20%;
-    height:550px;
+    top: 4%;
+    width:350px;
+    height:635px;
     overflow-y: auto;
     background-color:rgb(195, 211, 205);
     opacity: 0.8;
@@ -40,7 +40,7 @@ body {
 }
 
 .sidebar-container-1{
-    position: absolute;
+    position: relative;
     background-color:rgb(138, 170, 158);
     width: 90%;
     opacity: 0.9;
@@ -49,10 +49,9 @@ body {
     border-radius: 10px;
 }
 .sidebar-container-2{
-    
     position: relative;
     background-color:rgb(138, 170, 158);
-    top:28%;
+    top:1%;
     width: 90%;
     opacity: 0.9;
     left: 5%;
@@ -66,7 +65,7 @@ body {
     font-family: Copperplate, "Copperplate Gothic Light", fantasy;
     font-weight: bold;
     color:rgb(2, 106, 85) !important ;
-    font-size:25px;
+    font-size:24px;
     left: 5%;
 }
 
