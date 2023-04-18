@@ -141,9 +141,9 @@ const portdata = {
   { "type": "Feature", "properties": { "GEOID": "517402128013", "TotalPop": 1854.0, "MedHHInc": 43836.0, "TotalUnit": 875.0, "pctWhite": 40.776699029126213, "area": 1081561.1557987577 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -76.381705, 36.805222 ], [ -76.378388, 36.806215 ], [ -76.380824, 36.807987 ], [ -76.379649, 36.809631 ], [ -76.375236, 36.810005 ], [ -76.374192, 36.814956 ], [ -76.370222, 36.814522 ], [ -76.361997, 36.811667 ], [ -76.359454, 36.812834 ], [ -76.359423, 36.812678 ], [ -76.35936, 36.812327 ], [ -76.378543, 36.80277 ], [ -76.379855, 36.803931 ], [ -76.381705, 36.805222 ] ] ] ] } }
   ]
   };
-/*
+
 import {port_pred} from './data/rstudio-export/port_predict2-4326(1).js' ;
-const geoJsonLayer = L.geoJSON(port_pred).addTo(map);*/
+
   
 // Dropdown selections
 const select = document.getElementById('property-select');
@@ -221,10 +221,11 @@ const onEachFeature = (feature, layer) => {
 let popLayer = L.geoJSON(portdata, { style: style, onEachFeature: onEachFeature });
 
 const updateMap = () => {
-
+    censuslegend.remove();
     map.removeLayer(popLayer);
     if (selectedProperty != 'Emptyselection'){
     popLayer = L.geoJSON(portdata, { style: style, onEachFeature: onEachFeature }).addTo(map);
+    censuslegend.addTo(map);
   }
 };
 
@@ -244,11 +245,11 @@ select.addEventListener('change', (event) => {
 
 const lcStyle = () => {
   return {
-    fillColor: 'red',
+    fillColor: '#ccadb2',
     fillOpacity: 0.7,
     weight: 2,
     opacity: 1,
-    color: 'red'
+    color: '#ccadb2'
 
   };
 };
@@ -285,7 +286,7 @@ const showPredLayer = () => {
     map.removeLayer(lcPredictLayer);
   } else{
 
-    lcPredictLayer = L.geoJSON(port_pred, { style: lcStyle }).addTo(map);
+    lcPredictLayer = L.geoJSON(port_pred, { style: lcStyle }).addTo(map).bindPopup();
     lcPredictLayer.bringToFront();
   }
 };
@@ -296,12 +297,44 @@ let lcRiskLayer;
 const showRiskLayer = () => {
   if (map.hasLayer(lcRiskLayer)) {
     map.removeLayer(lcRiskLayer);
+    risklegend.remove();
   } else{
     lcRiskLayer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_pred1_color/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 13}).addTo(map);
     lcRiskLayer.bringToFront();
+    risklegend.addTo(map);
   }
 };
 select4.addEventListener('click', showRiskLayer);
+
+// Create a custom control for the legend
+const risklegend = L.control({position: 'topright'});
+
+risklegend.onAdd = function(map) {
+  const div = L.DomUtil.create('div', 'legend');
+  div.innerHTML = `
+    <div><span style="background-color: #445a67; width: 20px; height: 10px; display: inline-block;"></span> Low Risk</div>
+    <div><span style="background-color: #57838d; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Risk</div>
+    <div><span style="background-color: #b4c9c7; width: 20px; height: 10px; display: inline-block;"></span> Moderate Risk</div>
+    <div><span style="background-color: #f3bfb3; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Risk</div>
+    <div><span style="background-color: #ccadb2; width: 20px; height: 10px; display: inline-block;"></span> High Risk</div>
+  `;
+  return div;
+};
+
+const censuslegend = L.control({position: 'topright'});
+
+censuslegend.onAdd = function(map) {
+  const div = L.DomUtil.create('div', 'legend');
+  div.innerHTML = `
+    <div><span style="background-color: #cfe8df; width: 20px; height: 10px; display: inline-block;"></span> Extreme Low Value</div>
+    <div><span style="background-color: #b0d0c5; width: 20px; height: 10px; display: inline-block;"></span> Low Value</div>
+    <div><span style="background-color: #9cc0b2; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Value</div>
+    <div><span style="background-color: #749f96; width: 20px; height: 10px; display: inline-block;"></span> Moderate Value</div>
+    <div><span style="background-color: #517a70; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Value</div>
+    <div><span style="background-color: #263f33; width: 20px; height: 10px; display: inline-block;"></span> High Value</div>
+  `;
+  return div;
+};
 
 
 /*
