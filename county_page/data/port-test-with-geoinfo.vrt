@@ -1,0 +1,22 @@
+<VRTDataset rasterXSize="1150" rasterYSize="1491">
+  <SRS dataAxisToSRSAxisMapping="1,2">PROJCS["USA_Contiguous_Albers_Equal_Area_Conic_USGS_version",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101004]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]]],PROJECTION["Albers_Conic_Equal_Area"],PARAMETER["latitude_of_center",23],PARAMETER["longitude_of_center",-96],PARAMETER["standard_parallel_1",29.5],PARAMETER["standard_parallel_2",45.5],PARAMETER["false_easting",0],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH]]</SRS>
+  <GeoTransform>  1.7177950000000000e+06,  1.0000000000000000e+01,  0.0000000000000000e+00,  1.7207790000000000e+06,  0.0000000000000000e+00, -1.0000000000000000e+01</GeoTransform>
+  <Metadata>
+    <MDI key="AREA_OR_POINT">Area</MDI>
+  </Metadata>
+  <Metadata domain="IMAGE_STRUCTURE">
+    <MDI key="INTERLEAVE">BAND</MDI>
+  </Metadata>
+  <VRTRasterBand dataType="Byte" band="1" blockYSize="1">
+    <ColorInterp>Gray</ColorInterp>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">port-test-with-geoinfo.tiff</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="1150" RasterYSize="1491" DataType="Float32" BlockXSize="1150" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="1150" ySize="1491" />
+      <DstRect xOff="0" yOff="0" xSize="1150" ySize="1491" />
+      <ScaleOffset>0</ScaleOffset>
+      <ScaleRatio>563.984</ScaleRatio>
+    </ComplexSource>
+  </VRTRasterBand>
+</VRTDataset>
