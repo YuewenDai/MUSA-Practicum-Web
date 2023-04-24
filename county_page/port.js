@@ -329,15 +329,17 @@ const onEachPredFeature = (feature, layer) => {
     layer.bindPopup(popupContent).openPopup();
     
     // Remove the style from the previously clicked layer, if any
-    if (currentLayer) {
-      currentLayer.setStyle({fillColor:  getPredColor(percentPrediction), color: getPredColor(percentPrediction), weight: 1});
+    if (currentLayer && currentLayer !== e.target) {
+      
+      lcPredictLayer.resetStyle(currentLayer)
+      
     }
 
     // Change the layer style when clicked
     layer.setStyle({fillColor: '#ebf463', color: 'yellow', weight: 5});
 
     // Set the current layer to the clicked layer
-    currentLayer = layer;
+    currentLayer = e.target;
   });
 };
 
