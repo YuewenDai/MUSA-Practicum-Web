@@ -2,6 +2,8 @@
 
 //var GeoRasterLayer = require("georaster-layer-for-leaflet");
 
+// main body
+
 var map = L.map('map', {
     center: [36.848253, -76.364559],
     zoom: 13
@@ -310,6 +312,10 @@ const showPredLayer = () => {
       }, onEachFeature: onEachPredFeature }).addTo(map);
     predlegend.addTo(map);
     lcPredictLayer.bringToFront();
+    infoContent.appendChild(infoMessage);
+    infoContent.appendChild(closeButton);
+
+    document.body.appendChild(infoContent);
   }
 };
 
@@ -382,7 +388,7 @@ select2.addEventListener('change', (event) => {
     if (map.hasLayer(lc2018Layer)) {
       map.removeLayer(lc2018Layer);
     }
-    lc2014Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_14-with-geoinfo/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
+    lc2014Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_14_geoinfo/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
   } else {
     // The user selected the empty option
     if (map.hasLayer(lc2018Layer)) {
@@ -471,6 +477,18 @@ fetch('/county_page/data/USGS_1_n37w077_20210610.tif')
     }).addTo(map);
   });
 */
+// pop-up content for predlayer
+const infoContent = document.createElement('div');
+infoContent.id = 'info-content';
+
+const infoMessage = document.createElement('p');
+infoMessage.textContent = 'Select a cell on the map to view predicted values.';
+
+const closeButton = document.createElement('button');
+closeButton.textContent = 'Close';
+closeButton.addEventListener('click', () => {
+  infoContent.style.display = 'none';
+});
 
 
 
