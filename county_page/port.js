@@ -11,45 +11,10 @@ var map = L.map('map', {
 var Stamen_Terrain = L.tileLayer('http://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png', {
     attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     subdomains: 'abcd',
-    minZoom: 0,
-    maxZoom: 20,
+    minZoom: 8,
+    maxZoom: 18,
     ext: 'png'
   }).addTo(map);
-
-
-/*
-  var url_to_geotiff_file = "county_page/data/port_14_10.tif";
-
-  fetch(url_to_geotiff_file)
-    .then(response => response.arrayBuffer())
-    .then(arrayBuffer => {
-      parse_georaster(arrayBuffer).then(georaster => {
-        console.log("georaster:", georaster);
-  
-        /*
-            GeoRasterLayer is an extension of GridLayer,
-            which means can use GridLayer options like opacity.
-  
-            Just make sure to include the georaster option!
-  
-            Optionally set the pixelValuesToColorFn function option to customize
-            how values for a pixel are translated to a color.
-  
-            http://leafletjs.com/reference-1.2.0.html#gridlayer
-        
-        var layer = new GeoRasterLayer({
-            georaster: georaster,
-            opacity: 0.7,
-            
-            resolution: 64 // optional parameter for adjusting display resolution
-        });
-        layer.addTo(map);
-  
-        map.fitBounds(layer.getBounds());
-  
-    });
-  });
- */
 
   
 //GeoJson Part
@@ -142,8 +107,7 @@ const portdata = {
   ]
   };
 
-import {port_pred} from './data/rstudio-export/port_predict2-4326(1).js' ;
-
+import {port_pred} from './data/rstudio-export/port_pred_crop.js' ;
   
 // Dropdown selections
 const select = document.getElementById('property-select');
@@ -243,6 +207,7 @@ select.addEventListener('change', (event) => {
   updateMap();
 });
 
+/*
 const lcStyle = () => {
   return {
     fillColor: '#ccadb2',
@@ -253,7 +218,7 @@ const lcStyle = () => {
 
   };
 };
-
+*/
 /*
 select2.addEventListener('change', (event) => {
   // Get the selected option value
@@ -278,20 +243,109 @@ select2.addEventListener('change', (event) => {
   }
 });
 */
+// predict geojson
+const port_pred_updated = {
+  ...port_pred,
+  features: port_pred.features.map((feature) => {
+    const {originallc, ...properties} = feature.properties;
+    let updatedOriginallc;
+    if (originallc === 1) {
+      updatedOriginallc = 'Water';
+    } else if (originallc === 2) {
+      updatedOriginallc = 'Emergent Wetlands';
+    } else if (originallc === 3) {
+      updatedOriginallc = 'Tree Canopy';
+    } else if (originallc === 4) {
+      updatedOriginallc = 'Scrub\Shrub';
+    } else if (originallc === 5) {
+      updatedOriginallc = 'Low Vegetation';
+    } else {
+      updatedOriginallc = originallc;
+    }
+    return {
+      ...feature,
+      properties: {
+        ...properties,
+        originallc: updatedOriginallc
+      }
+    };
+  })
+};
 
 let lcPredictLayer;
 // Create a function to show the predLayer on the map
+
+const getPredColor = (percentPrediction) => {
+  if (percentPrediction < 5) {
+    return '#b0d0c5';
+  } else if (percentPrediction < 10) {
+    return '#9cc0b2';
+  } else if (percentPrediction < 15) {
+    return '#749f96';
+  } else if (percentPrediction < 20) {
+    return '#517a70';
+  } else if (percentPrediction < 30) {
+    return '#263f33';
+  } else {
+    return 'red';
+  }
+};
+
 const showPredLayer = () => {
   if (map.hasLayer(lcPredictLayer)) {
     map.removeLayer(lcPredictLayer);
+    predlegend.remove();
   } else{
 
-    lcPredictLayer = L.geoJSON(port_pred, { style: lcStyle }).addTo(map).bindPopup();
+    lcPredictLayer = L.geoJSON(port_pred_updated, { style: (feature) => {
+        const percentPrediction = feature.properties.probability * 100;
+        return {
+          fillColor: getPredColor(percentPrediction),
+          weight: 1,
+          opacity: 1,
+          color: getPredColor(percentPrediction),
+          dashArray: '3',
+          fillOpacity: 1
+        };
+      }, onEachFeature: onEachPredFeature }).addTo(map);
+    predlegend.addTo(map);
     lcPredictLayer.bringToFront();
   }
 };
+
+let currentLayer;
+
+const onEachPredFeature = (feature, layer) => {
+  layer.on('click', (e) => {
+    const cellInfo = e.target.feature.properties;
+    const percentPrediction = (cellInfo.probability*100).toFixed(2);
+    const popupContent = `
+    <div class="popup-content">
+      <h3 class="popup-title">Cell Information</h3>
+      <p><strong>Original Landcover:</strong> ${cellInfo.originallc}</p>
+      <p><strong>Probability to change:</strong> ${percentPrediction}%</p>
+    </div>
+    `;
+    layer.bindPopup(popupContent).openPopup();
+    
+    // Remove the style from the previously clicked layer, if any
+    if (currentLayer) {
+      currentLayer.setStyle({fillColor:  getPredColor(percentPrediction), color: getPredColor(percentPrediction), weight: 1});
+    }
+
+    // Change the layer style when clicked
+    layer.setStyle({fillColor: '#ebf463', color: 'yellow', weight: 5});
+
+    // Set the current layer to the clicked layer
+    currentLayer = layer;
+  });
+};
+
 select3.addEventListener('click', showPredLayer);
 
+
+
+// predict raster
 let lcRiskLayer;
 // Create a function to show the predLayer on the map
 const showRiskLayer = () => {
@@ -299,12 +353,48 @@ const showRiskLayer = () => {
     map.removeLayer(lcRiskLayer);
     risklegend.remove();
   } else{
-    lcRiskLayer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_pred1_color/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 13}).addTo(map);
+    lcRiskLayer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_color-geoinfo/{z}/{x}/{y}.png', {tms: 1, opacity: 0.8, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
     lcRiskLayer.bringToFront();
     risklegend.addTo(map);
   }
 };
 select4.addEventListener('click', showRiskLayer);
+
+
+// original raster
+let lc2018Layer;
+let lc2014Layer;
+// Create a function to show the predLayer on the map
+select2.addEventListener('change', (event) => {
+  const value = event.target.value;
+
+  // Check which option was selected and show the corresponding layer
+  if (value === '2018_lc') {
+    // Show the 2018 landcover layer
+    if (map.hasLayer(lc2014Layer)) {
+      map.removeLayer(lc2014Layer);
+    }
+    lc2018Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port-with-geoinfo/port-with-geoinfo/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
+  } else if (value === '2014_lc') {
+    // Show the 2014 landcover layer
+    if (map.hasLayer(lc2018Layer)) {
+      map.removeLayer(lc2018Layer);
+    }
+    lc2014Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_14-with-geoinfo/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
+  } else {
+    // The user selected the empty option
+    if (map.hasLayer(lc2018Layer)) {
+      map.removeLayer(lc2018Layer);
+    }
+    if (map.hasLayer(lc2014Layer)) {
+      map.removeLayer(lc2014Layer);
+    }
+  }
+});
+
+
+
+
 
 // Create a custom control for the legend
 const risklegend = L.control({position: 'topright'});
@@ -312,11 +402,11 @@ const risklegend = L.control({position: 'topright'});
 risklegend.onAdd = function(map) {
   const div = L.DomUtil.create('div', 'legend');
   div.innerHTML = `
-    <div><span style="background-color: #445a67; width: 20px; height: 10px; display: inline-block;"></span> Low Risk</div>
-    <div><span style="background-color: #57838d; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Risk</div>
-    <div><span style="background-color: #b4c9c7; width: 20px; height: 10px; display: inline-block;"></span> Moderate Risk</div>
-    <div><span style="background-color: #f3bfb3; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Risk</div>
-    <div><span style="background-color: #ccadb2; width: 20px; height: 10px; display: inline-block;"></span> High Risk</div>
+    <div><span style="background-color: #445a67; width: 20px; height: 10px; display: inline-block;"></span> Highly Unlikely</div>
+    <div><span style="background-color: #57838d; width: 20px; height: 10px; display: inline-block;"></span> Not Probable</div>
+    <div><span style="background-color: #b4c9c7; width: 20px; height: 10px; display: inline-block;"></span> Probable</div>
+    <div><span style="background-color: #f3bfb3; width: 20px; height: 10px; display: inline-block;"></span> Not Certain</div>
+    <div><span style="background-color: #ccadb2; width: 20px; height: 10px; display: inline-block;"></span> Close to Change</div>
   `;
   return div;
 };
@@ -326,15 +416,32 @@ const censuslegend = L.control({position: 'topright'});
 censuslegend.onAdd = function(map) {
   const div = L.DomUtil.create('div', 'legend');
   div.innerHTML = `
-    <div><span style="background-color: #cfe8df; width: 20px; height: 10px; display: inline-block;"></span> Extreme Low Value</div>
-    <div><span style="background-color: #b0d0c5; width: 20px; height: 10px; display: inline-block;"></span> Low Value</div>
-    <div><span style="background-color: #9cc0b2; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Value</div>
-    <div><span style="background-color: #749f96; width: 20px; height: 10px; display: inline-block;"></span> Moderate Value</div>
-    <div><span style="background-color: #517a70; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Value</div>
-    <div><span style="background-color: #263f33; width: 20px; height: 10px; display: inline-block;"></span> High Value</div>
+    <div><span style="background-color: #b0d0c5; width: 20px; height: 10px; display: inline-block;"></span> Low Risk</div>
+    <div><span style="background-color: #9cc0b2; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Risk</div>
+    <div><span style="background-color: #749f96; width: 20px; height: 10px; display: inline-block;"></span> Moderate Risk</div>
+    <div><span style="background-color: #517a70; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Risk</div>
+    <div><span style="background-color: #263f33; width: 20px; height: 10px; display: inline-block;"></span> High Risk</div>
   `;
   return div;
 };
+
+const predlegend = L.control({position: 'topright'});
+
+predlegend.onAdd = function(map) {
+  const div = L.DomUtil.create('div', 'legend');
+  div.innerHTML = `
+    <h3 class="popup-title"; style= "font-family: 'Quicksand', sans-serif;">Click a cell <br>for more info!</h3>
+    <div><span style="background-color: #b0d0c5; width: 20px; height: 10px; display: inline-block;"></span> Low Risk</div>
+    <div><span style="background-color: #9cc0b2; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Risk</div>
+    <div><span style="background-color: #749f96; width: 20px; height: 10px; display: inline-block;"></span> Moderate Risk</div>
+    <div><span style="background-color: #517a70; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Risk</div>
+    <div><span style="background-color: #263f33; width: 20px; height: 10px; display: inline-block;"></span> High Risk</div>
+    <div><span style="background-color: red; width: 20px; height: 10px; display: inline-block;"></span> Need Attention</div>
+  `;
+  return div;
+};
+
+
 
 
 /*
