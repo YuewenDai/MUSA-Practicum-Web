@@ -382,13 +382,13 @@ select2.addEventListener('change', (event) => {
     if (map.hasLayer(lc2014Layer)) {
       map.removeLayer(lc2014Layer);
     }
-    lc2018Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port-with-geoinfo/port-with-geoinfo/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
+    lc2018Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_18_color/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
   } else if (value === '2014_lc') {
     // Show the 2014 landcover layer
     if (map.hasLayer(lc2018Layer)) {
       map.removeLayer(lc2018Layer);
     }
-    lc2014Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_14_geoinfo/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
+    lc2014Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_14_color/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
   } else {
     // The user selected the empty option
     if (map.hasLayer(lc2018Layer)) {
@@ -413,8 +413,8 @@ risklegend.onAdd = function(map) {
     <div><span style="background-color: #445a67; width: 20px; height: 10px; display: inline-block;"></span> Highly Unlikely</div>
     <div><span style="background-color: #57838d; width: 20px; height: 10px; display: inline-block;"></span> Not Probable</div>
     <div><span style="background-color: #b4c9c7; width: 20px; height: 10px; display: inline-block;"></span> Probable</div>
-    <div><span style="background-color: #f3bfb3; width: 20px; height: 10px; display: inline-block;"></span> Not Certain</div>
-    <div><span style="background-color: #ccadb2; width: 20px; height: 10px; display: inline-block;"></span> Close to Change</div>
+    <div><span style="background-color: #f3bfb3; width: 20px; height: 10px; display: inline-block;"></span> Likely to Change</div>
+    <div><span style="background-color: #ccadb2; width: 20px; height: 10px; display: inline-block;"></span> Highly Likely</div>
   `;
   return div;
 };
@@ -424,11 +424,11 @@ const censuslegend = L.control({position: 'topright'});
 censuslegend.onAdd = function(map) {
   const div = L.DomUtil.create('div', 'legend');
   div.innerHTML = `
-    <div><span style="background-color: #b0d0c5; width: 20px; height: 10px; display: inline-block;"></span> Low Risk</div>
-    <div><span style="background-color: #9cc0b2; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Risk</div>
-    <div><span style="background-color: #749f96; width: 20px; height: 10px; display: inline-block;"></span> Moderate Risk</div>
-    <div><span style="background-color: #517a70; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Risk</div>
-    <div><span style="background-color: #263f33; width: 20px; height: 10px; display: inline-block;"></span> High Risk</div>
+    <div><span style="background-color: #b0d0c5; width: 20px; height: 10px; display: inline-block;"></span> Low Value</div>
+    <div><span style="background-color: #9cc0b2; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Value</div>
+    <div><span style="background-color: #749f96; width: 20px; height: 10px; display: inline-block;"></span> Moderate Value</div>
+    <div><span style="background-color: #517a70; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Value</div>
+    <div><span style="background-color: #263f33; width: 20px; height: 10px; display: inline-block;"></span> High Value</div>
   `;
   return div;
 };
