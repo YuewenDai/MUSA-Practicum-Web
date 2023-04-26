@@ -83,7 +83,7 @@ This is the web tool for MUSA-801
     install.packages("shinyFiles")
     ```
 
-**Tips for selecting vm type:** 
+**Tips for selecting vm and rstudio** 
 
 1. Check the quota limits for your account:
 2. Select machine type on purpose
