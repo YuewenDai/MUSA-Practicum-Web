@@ -1,4 +1,4 @@
-**About This Project**
+**About This Project** <br>
 This project aims to develop a precision forecast model for land cover change at the Chesapeake Watershed. By leveraging high-resolution longitudinal land cover data provided by the Chesapeake Conservancy, the model will predict land cover conversions from pervious to impervious surfaces. This forecast will enable land use and environmental planners to visualize and assess potential impacts on flood risk, heat stress, and heat island risks in the region. The model will be generalizable to the county level, incorporating only widely available inputs, thus allowing any municipality within the Chesapeake basin to replicate the analysis. This proof-of-concept project will demonstrate the utility of precision conservation in climate adaptation and mitigation planning and provide a valuable tool for planners and policymakers across the region
 
 **Cloud functions**
