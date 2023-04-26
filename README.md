@@ -6,6 +6,7 @@
     
     Step 1.2. Create a firewall rule: Create a firewall rule in the Google Cloud Compute Engine by navigating to the ‘Firewall rules’ under ‘Menu’ > ‘Networking’. Configure the following settings:
     
+    
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a10657df-daf8-4d16-ac8b-4b0014ad69c6/Untitled.png)
     
     Step 1.3. Create a Virtual Machine Instance: Set up a new virtual machine on Google Cloud by navigating to ‘VM Instances’ under ‘Menu’ > ‘Compute Engine’.
