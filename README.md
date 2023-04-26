@@ -81,11 +81,6 @@
     Install cronR package to generate the task scheduler in R Studio Server. Use the add-in to automate any scripts in the virtual machine instance.
     
 
-```
-install.packages("cronR")
-install.packages("shinyFiles")
-```
-
 **Tips for selecting vm type:** 
 
 1. check the quota limits for your account:
