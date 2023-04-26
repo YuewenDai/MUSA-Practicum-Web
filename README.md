@@ -6,11 +6,12 @@
     
     Step 1.2. Create a firewall rule: Create a firewall rule in the Google Cloud Compute Engine by navigating to the ‘Firewall rules’ under ‘Menu’ > ‘Networking’. Configure the following settings:
     
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a10657df-daf8-4d16-ac8b-4b0014ad69c6/Untitled.png)
+    ![Untitled](https://user-images.githubusercontent.com/96805677/234602117-152ddbfd-076a-4ede-9e99-b17abcd0be6b.png)
+
     
     Step 1.3. Create a Virtual Machine Instance: Set up a new virtual machine on Google Cloud by navigating to ‘VM Instances’ under ‘Menu’ > ‘Compute Engine’.
     
-    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2831901c-c644-4d58-b566-480e196096d6/Untitled.png)
+    ![Untitled (1)](https://user-images.githubusercontent.com/96805677/234602258-65d8c616-80b1-451c-9731-03c6712548b4.png)
     
     Step 1.4. Virtual Machine Configurations: Give a name to the new VM instance (ex: “rstudio”) and choose a zone that’s close to the zone of operation to reduce the network latency. Since R stores all of its working datasets in memory, try to give the VM instance as much memory as we can afford. Under “OS images”, choose one of the latest versions of Ubuntu that supports the OpenSSL 1.0. R Studio Server connects always through an unsecured HTTP connection. 
     
