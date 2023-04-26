@@ -1,3 +1,5 @@
+**Cloud functions**
+
 ****R Studio Server on Google Cloud****
 
 1. Configure a virtual machine instance (Ubuntu OS) on Google Cloud.
