@@ -78,10 +78,10 @@ This is the web tool for MUSA-801
     Install cronR package to generate the task scheduler in R Studio Server. Use the add-in to automate any scripts in the virtual machine instance.
     
 
-```
-install.packages("cronR")
-install.packages("shinyFiles")
-```
+    ```
+    install.packages("cronR")
+    install.packages("shinyFiles")
+    ```
 
 **Tips for selecting vm type:** 
 
@@ -90,10 +90,10 @@ install.packages("shinyFiles")
 3. Make sure to monitor the running time for account
 4. Install special dependency for spatial R packages   
 
-```
-sudo apt-get install gdal-bin libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libudunits2-dev
-libgdal-dev
-sudo apt install cmake
+    ```
+    sudo apt-get install gdal-bin libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+    libudunits2-dev libgdal-dev
+    sudo apt install cmake
 
- ```
+    ```
      
