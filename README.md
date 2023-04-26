@@ -9,9 +9,11 @@ This is the web tool for MUSA-801
     Step 1.1. Create a Google Cloud Project: Sign in to **[Google Cloud Console](https://console.cloud.google.com/)** and create a project.
     
     Step 1.2. Create a firewall rule: Create a firewall rule in the Google Cloud Compute Engine by navigating to the ‘Firewall rules’ under ‘Menu’ > ‘Networking’. Configure the following settings:
-    
+    ![image](https://user-images.githubusercontent.com/96805677/234597162-80a100ac-de11-4beb-95af-ef82037de757.png)
+
     Step 1.3. Create a Virtual Machine Instance: Set up a new virtual machine on Google Cloud by navigating to ‘VM Instances’ under ‘Menu’ > ‘Compute Engine’.
-    
+    ![4d9020f5b2780387208344c2f293619](https://user-images.githubusercontent.com/96805677/234596497-1b961690-9c67-4895-aa44-26263e323f42.png)
+
     Step 1.4. Virtual Machine Configurations: Give a name to the new VM instance (ex: “rstudio”) and choose a zone that’s close to the zone of operation to reduce the network latency. Since R stores all of its working datasets in memory, try to give the VM instance as much memory as we can afford. Under “OS images”, choose one of the latest versions of Ubuntu that supports the OpenSSL 1.0. R Studio Server connects always through an unsecured HTTP connection. Therefore, under Firewall, “Allow HTTP traffic”. Lastly, click “Create” to launch the instance.
     
 2. Install R and R Studio Server on the Virtual Machine.
@@ -89,11 +91,27 @@ This is the web tool for MUSA-801
 2. Select machine type on purpose
 3. Make sure to monitor the running time for account
 4. Install special dependency for spatial R packages   
-
     ```
+    sudo apt-get update
     sudo apt-get install gdal-bin libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
     libudunits2-dev libgdal-dev
     sudo apt install cmake
 
     ```
-     
+5. Understand the fold path of R and R studio for version control. Check the Rsession running status via SHH when you can not get access to the rstudio
+    
+    ```
+    sudo rstudio-server status
+    ```
+    
+6. Check the storage space for your machine: Some time you upload too many files to your machine and you might not be able to save the result of your prediction. You can add additional disk for storage but that will not speed up your calculation
+    
+    ```r
+    $ lsblk
+    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+    sda      8:0    0   10G  0 disk
+    └─sda1   8:1    0   10G  0 part /
+    sdb      8:16   0  100G  0 disk
+    └─sdb1   8:17   0  100G  0 part /mnt/newdisk
+    ```
+ 7. It is possible to immigrant your machine between project. Take use of the machine image.
