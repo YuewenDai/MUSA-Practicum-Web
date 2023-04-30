@@ -16,14 +16,11 @@ print(crs)
 
 # gt = ds_src.GetGeoTransform()
 
-
-gt =  ds_src.GetGeoTransform()
-
-geotransformation = (
-    1717795,  # top left x
+gt = (
+    1677105,  # top left x
     10,       # horizontal pixel size
     0,        # row rotation
-    1720779,  # top left y
+    1738940,  # top left y
     0,        # column rotation
     -10,      # vertical pixel size
 )
@@ -31,7 +28,7 @@ geotransformation = (
 print(gt)
 
 # Open the image you want to copy the transform info to
-ds_dst = gdal.Open("D:/0MUSA/MUSA801/Practicum/originallc/originallc_for_tile/isle_18_color.tif")
+ds_dst = gdal.Open("D:/0MUSA/MUSA801/Practicum//raster_pred/isle_color.tif")
 
 # Set the crs and geotransform from the source image
 ds_dst.SetProjection(crs)
@@ -39,6 +36,6 @@ ds_dst.SetGeoTransform(gt)
 
 # Save a new copy of the destination image
 gdal.GetDriverByName('GTiff').CreateCopy(
-    'D:/0MUSA/MUSA801/Practicum/originallc/isle_18_color_geoinfo.tif',  # New image file name
+    'D:/0MUSA/MUSA801/Practicum//raster_pred/isle_color_geoinfo.tif',  # New image file name
     ds_dst,
 )

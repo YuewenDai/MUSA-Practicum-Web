@@ -86,9 +86,10 @@ const portdata = {
   ]
   };
 
-import {port_pred} from './data/rstudio-export/port_predict2-4326(1).js' ;
+import {isle_pred} from './data/rstudio-export/port_predict2-4326(1).js' ;
 
   
+
 // Dropdown selections
 const select = document.getElementById('property-select');
 const select2 = document.getElementById('geo-select');
@@ -187,6 +188,7 @@ select.addEventListener('change', (event) => {
   updateMap();
 });
 
+/*
 const lcStyle = () => {
   return {
     fillColor: '#ccadb2',
@@ -197,7 +199,7 @@ const lcStyle = () => {
 
   };
 };
-
+*/
 /*
 select2.addEventListener('change', (event) => {
   // Get the selected option value
@@ -222,20 +224,118 @@ select2.addEventListener('change', (event) => {
   }
 });
 */
+// predict geojson
+
+
+const isle_pred_updated = {
+  ...isle_pred,
+  features: isle_pred.features.map((feature) => {
+    const {originallc, ...properties} = feature.properties;
+    let updatedOriginallc;
+    if (originallc === 1) {
+      updatedOriginallc = 'Water';
+    } else if (originallc === 2) {
+      updatedOriginallc = 'Emergent Wetlands';
+    } else if (originallc === 3) {
+      updatedOriginallc = 'Tree Canopy';
+    } else if (originallc === 4) {
+      updatedOriginallc = 'Scrub\Shrub';
+    } else if (originallc === 5) {
+      updatedOriginallc = 'Low Vegetation';
+    } else {
+      updatedOriginallc = originallc;
+    }
+    return {
+      ...feature,
+      properties: {
+        ...properties,
+        originallc: updatedOriginallc
+      }
+    };
+  })
+};
 
 let lcPredictLayer;
 // Create a function to show the predLayer on the map
+
+const getPredColor = (percentPrediction) => {
+  if (percentPrediction < 5) {
+    return '#b0d0c5';
+  } else if (percentPrediction < 10) {
+    return '#9cc0b2';
+  } else if (percentPrediction < 15) {
+    return '#749f96';
+  } else if (percentPrediction < 20) {
+    return '#517a70';
+  } else if (percentPrediction < 30) {
+    return '#263f33';
+  } else {
+    return 'red';
+  }
+};
+
 const showPredLayer = () => {
   if (map.hasLayer(lcPredictLayer)) {
     map.removeLayer(lcPredictLayer);
+    predlegend.remove();
   } else{
 
-    lcPredictLayer = L.geoJSON(port_pred, { style: lcStyle }).addTo(map).bindPopup();
+    lcPredictLayer = L.geoJSON(isle_pred_updated, { style: (feature) => {
+        const percentPrediction = feature.properties['.pred_1'] * 100;
+        return {
+          fillColor: getPredColor(percentPrediction),
+          weight: 1,
+          opacity: 1,
+          color: getPredColor(percentPrediction),
+          dashArray: '3',
+          fillOpacity: 1
+        };
+      }, onEachFeature: onEachPredFeature }).addTo(map);
+    predlegend.addTo(map);
     lcPredictLayer.bringToFront();
+    infoContent.appendChild(infoMessage);
+    infoContent.appendChild(closeButton);
+
+    document.body.appendChild(infoContent);
   }
 };
+
+let currentLayer;
+
+const onEachPredFeature = (feature, layer) => {
+  layer.on('click', (e) => {
+    const cellInfo = e.target.feature.properties;
+    const percentPrediction = (cellInfo['.pred_1']*100).toFixed(2);
+    const popupContent = `
+    <div class="popup-content">
+      <h3 class="popup-title">Cell Information</h3>
+      <p><strong>Original Landcover:</strong> ${cellInfo.originallc}</p>
+      <p><strong>Probability to change:</strong> ${percentPrediction}%</p>
+    </div>
+    `;
+    console.log(cellInfo.originallc,cellInfo.pred_1);
+    layer.bindPopup(popupContent).openPopup();
+    
+    // Remove the style from the previously clicked layer, if any
+    if (currentLayer && currentLayer !== e.target) {
+      
+      lcPredictLayer.resetStyle(currentLayer)
+      
+    }
+
+    // Change the layer style when clicked
+    layer.setStyle({fillColor: '#ebf463', color: 'yellow', weight: 5});
+
+    // Set the current layer to the clicked layer
+    currentLayer = e.target;
+  });
+};
+
 select3.addEventListener('click', showPredLayer);
 
+
+
+// predict raster
 let lcRiskLayer;
 // Create a function to show the predLayer on the map
 const showRiskLayer = () => {
@@ -243,12 +343,48 @@ const showRiskLayer = () => {
     map.removeLayer(lcRiskLayer);
     risklegend.remove();
   } else{
-    lcRiskLayer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/port_pred1_color/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 13}).addTo(map);
+    lcRiskLayer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/isle_color_geoinfo/{z}/{x}/{y}.png', {tms: 1, opacity: 0.8, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
     lcRiskLayer.bringToFront();
     risklegend.addTo(map);
   }
 };
 select4.addEventListener('click', showRiskLayer);
+
+
+// original raster
+let lc2018Layer;
+let lc2014Layer;
+// Create a function to show the predLayer on the map
+select2.addEventListener('change', (event) => {
+  const value = event.target.value;
+
+  // Check which option was selected and show the corresponding layer
+  if (value === '2018_lc') {
+    // Show the 2018 landcover layer
+    if (map.hasLayer(lc2014Layer)) {
+      map.removeLayer(lc2014Layer);
+    }
+    lc2018Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/isle_18_color/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
+  } else if (value === '2014_lc') {
+    // Show the 2014 landcover layer
+    if (map.hasLayer(lc2018Layer)) {
+      map.removeLayer(lc2018Layer);
+    }
+    lc2014Layer = L.tileLayer('https://storage.googleapis.com/raster_layers_tile/isle_14_color/{z}/{x}/{y}.png', {tms: 1, opacity: 0.7, attribution: "", minZoom: 10, maxZoom: 16}).addTo(map);
+  } else {
+    // The user selected the empty option
+    if (map.hasLayer(lc2018Layer)) {
+      map.removeLayer(lc2018Layer);
+    }
+    if (map.hasLayer(lc2014Layer)) {
+      map.removeLayer(lc2014Layer);
+    }
+  }
+});
+
+
+
+
 
 // Create a custom control for the legend
 const risklegend = L.control({position: 'topright'});
@@ -256,11 +392,11 @@ const risklegend = L.control({position: 'topright'});
 risklegend.onAdd = function(map) {
   const div = L.DomUtil.create('div', 'legend');
   div.innerHTML = `
-    <div><span style="background-color: #445a67; width: 20px; height: 10px; display: inline-block;"></span> Low Risk</div>
-    <div><span style="background-color: #57838d; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Risk</div>
-    <div><span style="background-color: #b4c9c7; width: 20px; height: 10px; display: inline-block;"></span> Moderate Risk</div>
-    <div><span style="background-color: #f3bfb3; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Risk</div>
-    <div><span style="background-color: #ccadb2; width: 20px; height: 10px; display: inline-block;"></span> High Risk</div>
+    <div><span style="background-color: #445a67; width: 20px; height: 10px; display: inline-block;"></span> Highly Unlikely</div>
+    <div><span style="background-color: #57838d; width: 20px; height: 10px; display: inline-block;"></span> Not Probable</div>
+    <div><span style="background-color: #b4c9c7; width: 20px; height: 10px; display: inline-block;"></span> Probable</div>
+    <div><span style="background-color: #f3bfb3; width: 20px; height: 10px; display: inline-block;"></span> Likely to Change</div>
+    <div><span style="background-color: #ccadb2; width: 20px; height: 10px; display: inline-block;"></span> Highly Likely</div>
   `;
   return div;
 };
@@ -270,7 +406,6 @@ const censuslegend = L.control({position: 'topright'});
 censuslegend.onAdd = function(map) {
   const div = L.DomUtil.create('div', 'legend');
   div.innerHTML = `
-    <div><span style="background-color: #cfe8df; width: 20px; height: 10px; display: inline-block;"></span> Extreme Low Value</div>
     <div><span style="background-color: #b0d0c5; width: 20px; height: 10px; display: inline-block;"></span> Low Value</div>
     <div><span style="background-color: #9cc0b2; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Value</div>
     <div><span style="background-color: #749f96; width: 20px; height: 10px; display: inline-block;"></span> Moderate Value</div>
@@ -279,6 +414,24 @@ censuslegend.onAdd = function(map) {
   `;
   return div;
 };
+
+const predlegend = L.control({position: 'topright'});
+
+predlegend.onAdd = function(map) {
+  const div = L.DomUtil.create('div', 'legend');
+  div.innerHTML = `
+    <h3 class="popup-title"; style= "font-family: 'Quicksand', sans-serif;">Click a cell <br>for more info!</h3>
+    <div><span style="background-color: #b0d0c5; width: 20px; height: 10px; display: inline-block;"></span> Low Risk</div>
+    <div><span style="background-color: #9cc0b2; width: 20px; height: 10px; display: inline-block;"></span> Low-Moderate Risk</div>
+    <div><span style="background-color: #749f96; width: 20px; height: 10px; display: inline-block;"></span> Moderate Risk</div>
+    <div><span style="background-color: #517a70; width: 20px; height: 10px; display: inline-block;"></span> Moderate-High Risk</div>
+    <div><span style="background-color: #263f33; width: 20px; height: 10px; display: inline-block;"></span> High Risk</div>
+    <div><span style="background-color: red; width: 20px; height: 10px; display: inline-block;"></span> Need Attention</div>
+  `;
+  return div;
+};
+
+
 
 
 /*
@@ -306,6 +459,18 @@ fetch('/county_page/data/USGS_1_n37w077_20210610.tif')
     }).addTo(map);
   });
 */
+// pop-up content for predlayer
+const infoContent = document.createElement('div');
+infoContent.id = 'info-content';
+
+const infoMessage = document.createElement('p');
+infoMessage.textContent = 'Select a cell on the map to view predicted values.';
+
+const closeButton = document.createElement('button');
+closeButton.textContent = 'Close';
+closeButton.addEventListener('click', () => {
+  infoContent.style.display = 'none';
+});
 
 
 
