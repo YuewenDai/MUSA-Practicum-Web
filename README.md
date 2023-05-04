@@ -151,6 +151,7 @@ Export the raster layer from R. Use the below code in Python to set the original
 
     [-alpha] [-exact_color_entry | -nearest_color_entry]            [-b Band (default=1)] [-of format] [-co "NAME=VALUE"]* [-q]
     ```
+
 The Gdal2tiles is used to tile the raster file
      ```
     python copy_geotransform.py 
@@ -158,6 +159,7 @@ The Gdal2tiles is used to tile the raster file
     python gdal2tiles.py 
     [-p profile] [-r resampling] [-s srs] [-z zoom]
     ```
+
 
 
 
