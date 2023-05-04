@@ -146,6 +146,7 @@ Export the raster layer from R. Use the below code in Python to set the original
  ****Gdaldem & Gdal2tiles****
  
  The Gdaldem can be used to change the grayscale map to color map:
+ 
      ```
      gdaldem color-relief input-dem color-text-file output-color-relief-map
 
@@ -153,6 +154,7 @@ Export the raster layer from R. Use the below code in Python to set the original
     ```
 
 The Gdal2tiles is used to tile the raster file
+
      ```
     python copy_geotransform.py 
 
