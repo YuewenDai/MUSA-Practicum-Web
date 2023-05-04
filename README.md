@@ -124,12 +124,11 @@ This project aims to develop a precision forecast model for land cover change at
 ****Reset Projection****
 
 Export the raster layer from R. Use the below code in Python to set the original landcover layer's projection to the new one.
-    
-    ```
+   ```
     ds_src = gdal.Open(PATH TO THE ORIGINAL)
     crs = ds_src.GetProjection()
     gt = ds_src.GetGeoTransform()
-    ```
+   ```
    
    ```
     ds_dst = gdal.Open(PATH TO THE NEW)
@@ -153,11 +152,12 @@ Export the raster layer from R. Use the below code in Python to set the original
     [-alpha] [-exact_color_entry | -nearest_color_entry]            [-b Band (default=1)] [-of format] [-co "NAME=VALUE"]* [-q]
     ```
 The Gdal2tiles is used to tile the raster file
-    ```
+     ```
     python copy_geotransform.py 
 
     python gdal2tiles.py 
     [-p profile] [-r resampling] [-s srs] [-z zoom]
     ```
+
 
 
