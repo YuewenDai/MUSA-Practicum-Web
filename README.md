@@ -135,7 +135,7 @@ Export the raster layer from R. Use the below code in Python to set the original
     ds_dst = gdal.Open(PATH TO THE NEW)
     ds_dst.SetProjection(crs)
     ds_dst.SetGeoTransform(gt)
-    ```
+   ```
     
    Export the new layer with geo-info
    ```
