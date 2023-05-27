@@ -3,8 +3,8 @@
 //var GeoRasterLayer = require("georaster-layer-for-leaflet");
 
 var map = L.map('map', {
-    center: [36.848253, -76.364559],
-    zoom: 13
+    center: [36.902705, -76.700414],
+    zoom: 12
   });
 
 
@@ -86,7 +86,7 @@ const portdata = {
   ]
   };
 
-import {isle_pred} from './data/rstudio-export/port_predict2-4326(1).js' ;
+import {isle_pred} from './data/rstudio-export/isle_pred_crop.js' ;
 
   
 
