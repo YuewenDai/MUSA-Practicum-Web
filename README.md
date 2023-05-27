@@ -120,3 +120,48 @@ This project aims to develop a precision forecast model for land cover change at
     ```
     
 7. It is possible to immigrant your machine between projects. Make use of the machine image and [Snapshot](https://cloud.google.com/compute/docs/disks/snapshot-best-practices)
+
+****Reset Projection****
+
+Export the raster layer from R. Use the below code in Python to set the original landcover layer's projection to the new one.
+   ```
+    ds_src = gdal.Open(PATH TO THE ORIGINAL)
+    crs = ds_src.GetProjection()
+    gt = ds_src.GetGeoTransform()
+   ```
+   
+   ```
+    ds_dst = gdal.Open(PATH TO THE NEW)
+    ds_dst.SetProjection(crs)
+    ds_dst.SetGeoTransform(gt)
+   ```
+    
+   Export the new layer with geo-info
+   ```
+   gdal.GetDriverByName('GTiff').CreateCopy(
+    'PATH',  # New image file name
+    ds_dst,)
+   ```
+ 
+ ****Gdaldem & Gdal2tiles****
+ 
+ The Gdaldem can be used to change the grayscale map to color map:
+ 
+     ```
+     gdaldem color-relief input-dem color-text-file output-color-relief-map
+
+    [-alpha] [-exact_color_entry | -nearest_color_entry]            [-b Band (default=1)] [-of format] [-co "NAME=VALUE"]* [-q]
+    ```
+
+The Gdal2tiles is used to tile the raster file
+
+     ```
+    python copy_geotransform.py 
+
+    python gdal2tiles.py 
+    [-p profile] [-r resampling] [-s srs] [-z zoom]
+    ```
+
+
+
+
